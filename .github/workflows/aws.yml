@@ -20,6 +20,10 @@ jobs:
           export AWS_SECRET_ACCESS_KEY=$(aws sts assume-role-with-web-identity --role-arn arn:aws:iam::451269540766:role/t_rodman --role-session-name GitHubActionSession --web-identity-token "$WEB_IDENTITY_TOKEN" --duration-seconds 3600 --query 'Credentials.SecretAccessKey' --output text)
           export AWS_SESSION_TOKEN=$(aws sts assume-role-with-web-identity --role-arn arn:aws:iam::451269540766:role/t_rodman --role-session-name GitHubActionSession --web-identity-token "$WEB_IDENTITY_TOKEN" --duration-seconds 3600 --query 'Credentials.SessionToken' --output text)
 
+          echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
+          echo "AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY"
+          echo "AWS_SESSION_TOKEN: $AWS_SESSION_TOKEN"
+
       - name: Retrieve Flag
         run: |
           aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
