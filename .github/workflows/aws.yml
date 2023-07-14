@@ -19,10 +19,10 @@ jobs:
           export AWS_ACCESS_KEY_ID=$(aws sts assume-role-with-web-identity --role-arn arn:aws:iam::451269540766:role/t_rodman --role-session-name GitHubActionSession --web-identity-token "$WEB_IDENTITY_TOKEN" --duration-seconds 3600 --query 'Credentials.AccessKeyId' --output text)
           export AWS_SECRET_ACCESS_KEY=$(aws sts assume-role-with-web-identity --role-arn arn:aws:iam::451269540766:role/t_rodman --role-session-name GitHubActionSession --web-identity-token "$WEB_IDENTITY_TOKEN" --duration-seconds 3600 --query 'Credentials.SecretAccessKey' --output text)
           export AWS_SESSION_TOKEN=$(aws sts assume-role-with-web-identity --role-arn arn:aws:iam::451269540766:role/t_rodman --role-session-name GitHubActionSession --web-identity-token "$WEB_IDENTITY_TOKEN" --duration-seconds 3600 --query 'Credentials.SessionToken' --output text)
-          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile default
-          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile default
-          aws configure set aws_session_token $AWS_SESSION_TOKEN --profile default
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile test
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile test
+          aws configure set aws_session_token $AWS_SESSION_TOKEN --profile test
 
       - name: Retrieve Flag
         run: |
-          aws ssm get-parameter --name trust-me --region us-west-2 --profile default
+          aws ssm get-parameter --name trust-me --region us-west-2 --profile test
