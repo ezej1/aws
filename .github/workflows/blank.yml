@@ -13,13 +13,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Authenticate with AWS
-        uses: aws-actions/github-login@v1
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-region: us-west-2
           role-to-assume: arn:aws:iam::451269540766:role/t_rodman
           role-session-name: GitHubActionSession
+          aws-region: us-west-2
+          web-identity-token: ${{ secrets.TOKEN }}
+          audience: sts.amazonaws.com
 
-      - name: Use AWS CLI
+      - name: Retrieve Flag
         run: |
           aws ssm get-parameter --name trust-me --region us-west-2 --with-decryption
