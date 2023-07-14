@@ -16,9 +16,9 @@ jobs:
       - name: Configure AWS Credentials
         run: |
           export WEB_IDENTITY_TOKEN=${{ secrets.TOKEN }}
-          export AWS_ACCESS_KEY_ID=$(aws sts assume-role-with-web-identity --role-arn arn:aws:iam::451269540766:role/t_rodman --role-session-name GitHubActionSession --web-identity-token "$WEB_IDENTITY_TOKEN" --query 'Credentials.AccessKeyId' --output text)
-          export AWS_SECRET_ACCESS_KEY=$(aws sts assume-role-with-web-identity --role-arn arn:aws:iam::451269540766:role/t_rodman --role-session-name GitHubActionSession --web-identity-token "$WEB_IDENTITY_TOKEN" --query 'Credentials.SecretAccessKey' --output text)
-          export AWS_SESSION_TOKEN=$(aws sts assume-role-with-web-identity --role-arn arn:aws:iam::451269540766:role/t_rodman --role-session-name GitHubActionSession --web-identity-token "$WEB_IDENTITY_TOKEN" --query 'Credentials.SessionToken' --output text)
+          export AWS_ACCESS_KEY_ID=$(aws sts assume-role-with-web-identity --role-arn arn:aws:iam::451269540766:role/t_rodman --role-session-name GitHubActionSession --web-identity-token $WEB_IDENTITY_TOKEN --query 'Credentials.AccessKeyId' --output text)
+          export AWS_SECRET_ACCESS_KEY=$(aws sts assume-role-with-web-identity --role-arn arn:aws:iam::451269540766:role/t_rodman --role-session-name GitHubActionSession --web-identity-token $WEB_IDENTITY_TOKEN --query 'Credentials.SecretAccessKey' --output text)
+          export AWS_SESSION_TOKEN=$(aws sts assume-role-with-web-identity --role-arn arn:aws:iam::451269540766:role/t_rodman --role-session-name GitHubActionSession --web-identity-token $WEB_IDENTITY_TOKEN --query 'Credentials.SessionToken' --output text)
           aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile default
           aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile default
           aws configure set aws_session_token $AWS_SESSION_TOKEN --profile default
