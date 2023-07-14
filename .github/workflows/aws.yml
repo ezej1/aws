@@ -15,12 +15,10 @@ jobs:
 
       - name: Configure AWS Credentials
         run: |
-          echo ${{ secrets.TOKEN }} > token.txt
-          aws sts assume-role-with-web-identity --role-arn arn:aws:iam::451269540766:role/t_rodman --role-session-name GitHubActionSession --web-identity-token file://token.txt --duration-seconds 3600 > assumed-role.json
-          export AWS_ACCESS_KEY_ID=$(jq -r '.Credentials.AccessKeyId' assumed-role.json)
-          export AWS_SECRET_ACCESS_KEY=$(jq -r '.Credentials.SecretAccessKey' assumed-role.json)
-          export AWS_SESSION_TOKEN=$(jq -r '.Credentials.SessionToken' assumed-role.json)
-          rm token.txt assumed-role.json
+          export WEB_IDENTITY_TOKEN=${{ secrets.TOKEN }}
+          export AWS_ACCESS_KEY_ID=$(aws sts assume-role-with-web-identity --role-arn arn:aws:iam::451269540766:role/t_rodman --role-session-name GitHubActionSession --web-identity-token "$WEB_IDENTITY_TOKEN" --duration-seconds 3600 --query 'Credentials.AccessKeyId' --output text)
+          export AWS_SECRET_ACCESS_KEY=$(aws sts assume-role-with-web-identity --role-arn arn:aws:iam::451269540766:role/t_rodman --role-session-name GitHubActionSession --web-identity-token "$WEB_IDENTITY_TOKEN" --duration-seconds 3600 --query 'Credentials.SecretAccessKey' --output text)
+          export AWS_SESSION_TOKEN=$(aws sts assume-role-with-web-identity --role-arn arn:aws:iam::451269540766:role/t_rodman --role-session-name GitHubActionSession --web-identity-token "$WEB_IDENTITY_TOKEN" --duration-seconds 3600 --query 'Credentials.SessionToken' --output text)
 
       - name: Retrieve Flag
         run: |
