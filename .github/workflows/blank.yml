@@ -1,0 +1,26 @@
+name: AWS Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::451269540766:role/t_rodman
+          aws-region: us-west-2
+          web-identity-token: ${{ secrets.GITHUB_TOKEN }}
+          audience: sts.amazonaws.com
+
+      - name: Execute AWS CLI command
+        run: |
+          aws ssm get-parameter --with-decryption --name trust-me
