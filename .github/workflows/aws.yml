@@ -25,4 +25,4 @@ jobs:
 
       - name: Retrieve Flag
         run: |
-          aws ssm get-parameter --name trust-me --region us-west-2 --profile default
+          aws ssm get-parameter --name trust-me --region us-west-2 --profile default --with-decryption
