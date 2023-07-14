@@ -14,20 +14,14 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Configure AWS Credentials
-        run: |
-          export WEB_IDENTITY_TOKEN=${{ secrets.TOKEN }}
-          export AWS_ACCESS_KEY_ID=$(aws sts assume-role-with-web-identity --role-arn arn:aws:iam::451269540766:role/t_rodman --role-session-name GitHubActionSession --web-identity-token "$WEB_IDENTITY_TOKEN" --duration-seconds 3600 --query 'Credentials.AccessKeyId' --output text)
-          export AWS_SECRET_ACCESS_KEY=$(aws sts assume-role-with-web-identity --role-arn arn:aws:iam::451269540766:role/t_rodman --role-session-name GitHubActionSession --web-identity-token "$WEB_IDENTITY_TOKEN" --duration-seconds 3600 --query 'Credentials.SecretAccessKey' --output text)
-          export AWS_SESSION_TOKEN=$(aws sts assume-role-with-web-identity --role-arn arn:aws:iam::451269540766:role/t_rodman --role-session-name GitHubActionSession --web-identity-token "$WEB_IDENTITY_TOKEN" --duration-seconds 3600 --query 'Credentials.SessionToken' --output text)
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::451269540766:role/t_rodman
+          aws-region: us-west-2
+          web-identity-token: ${{ secrets.TOKEN }}
+          audience: sts.amazonaws.com
 
-          mkdir -p ~/.aws
-          echo "[default]" > ~/.aws/config
-          echo "region=us-west-2" >> ~/.aws/config
-          echo "output=json" >> ~/.aws/config
-          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile default
-          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile default
-          aws configure set aws_session_token $AWS_SESSION_TOKEN --profile default
-
-      - name: Retrieve Flag
+      - name: Access Flagged Resource
         run: |
-          aws ssm get-parameter --name trust-me --region us-west-2 --profile default --with-decryption
+          flag_value=$(aws ssm get-parameter --name trust-me --region us-west-2 --with-decryption --query "Parameter.Value" --output text)
+          echo "The flag value is: $flag_value"
